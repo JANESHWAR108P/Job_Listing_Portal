@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Applicants for {{ job.title }}{% endblock %}
+
+{% block content %}
+    <h1>Applicants for: {{ job.title }}</h1>
+    <p class="text-muted">Location: {{ job.location }}</p>
+    <hr>
+
+    {% if applications %}
+        <div class="list-group">
+        {% for app in applications %}
+            <!-- Use the dynamic class for edge color -->
+            <div class="list-group-item application-item {{ app.status.lower() }}">
+                <p><strong>Applicant:</strong> {{ app.applicant.first_name }} {{ app.applicant.last_name }} ({{ app.applicant.email }})</p>
+                <p><strong>Status:</strong> 
+                    <!-- Use the dynamic badge class and icon -->
+                    <span class="status-badge {{ app.status.lower() }}">
+                        {% if app.status == 'Approved' %}
+                            <i class="bi bi-check-circle-fill"></i> Approved
+                        {% elif app.status == 'Rejected' %}
+                            <i class="bi bi-x-circle-fill"></i> Rejected
+                        {% else %}
+                            <i class="bi bi-hourglass-split"></i> Pending
+                        {% endif %}
+                    </span>
+                </p>
+                
+                <!-- ... (rest of the content: phone, applied date, cover letter, resume link/buttons) ... -->
+
+                {% if app.applicant.resume_filename %}
+                    <a href="{{ url_for('uploaded_file', filename=app.applicant.resume_filename) }}" target="_blank" class="btn btn-sm btn-outline-primary me-2">View Resume</a>
+                {% else %}
+                    <small class="text-danger me-2">No resume uploaded</small>
+                {% endif %}
+
+                {% if app.status == 'Pending' %}
+                    <form method="POST" action="{{ url_for('update_application_status', application_id=app.id) }}" class="d-inline">
+                        <input type="hidden" name="status" value="Approved">
+                        <button type="submit" class="btn btn-sm btn-success me-2">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('update_application_status', application_id=app.id) }}" class="d-inline">
+                        <input type="hidden" name="status" value="Rejected">
+                        <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>No applicants for this job yet.</p>
+    {% endif %}
+    <a href="{{ url_for('dashboard') }}" class="mt-4 btn btn-secondary">Back to Dashboard</a>
+{% endblock %}

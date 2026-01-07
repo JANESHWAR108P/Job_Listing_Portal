@@ -1,0 +1,110 @@
+/* Styling for the new Hero Section */
+.hero-section {
+    background: url('images.unsplash.com') no-repeat center center/cover;
+    height: 400px; /* Adjust height as needed */
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    background-color: rgba(0, 74, 153, 0.75); /* Dark blue overlay for text readability */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.hero-title {
+    color: white;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.hero-subtitle {
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.search-form-container {
+    width: 80%;
+    max-width: 800px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+/* Custom Job Card Styling (Figma look) */
+.job-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.job-card .btn {
+    margin-top: auto; /* Pushes the button to the bottom */
+}
+/* Color Coding for Application Statuses (Figma Style) */
+
+/* Base style for the status badge */
+.status-badge {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-badge.pending {
+    background-color: #fff3cd; /* Light yellow background */
+    color: #856404; /* Dark yellow text */
+    border: 1px solid #ffeeba;
+}
+
+.status-badge.approved {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.rejected {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    border: 1px solid #f5c6cb;
+}
+
+/* Styling for the list items/cards themselves */
+.application-item {
+    border-left: 8px solid; /* Color stripe on the edge */
+}
+
+.application-item.pending {
+    border-left-color: #ffc107; /* Yellow stripe */
+}
+
+.application-item.approved {
+    border-left-color: #28a745; /* Green stripe */
+}
+
+.application-item.rejected {
+    border-left-color: #dc3545; /* Red stripe */
+}
+

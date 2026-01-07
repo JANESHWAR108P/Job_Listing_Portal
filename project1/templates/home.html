@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Job Portal{% endblock %}
+
+{% block content %}
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Hero Section (Mimicking the Figma template's full-width image) -->
+    <div class="hero-section mb-5">
+        <div class="hero-overlay">
+            <h1 class="hero-title">Find Your Dream Job Today!</h1>
+            <p class="hero-subtitle">Good life begins with a good company.</p>
+            
+            <!-- Search Form in the middle of the hero section -->
+            <div class="search-form-container">
+                <form method="GET" action="{{ url_for('home') }}" class="row g-3">
+                    <div class="col-md-5">
+                        <input type="text" name="search_query" class="form-control form-control-lg" placeholder="Job Title or Keyword" value="{{ search_query or '' }}">
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" name="location" class="form-control form-control-lg" placeholder="Location" value="{{ location_query or '' }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-4">Recent Jobs Available ({{ jobs|length }} results)</h2>
+    <div class="row">
+        {% for job in jobs %}
+        <div class="col-md-4">
+            <div class="job-card p-4">
+                <h5 class="mb-1">{{ job.title }}</h5>
+                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> {{ job.location }}</p>
+                <p class="mb-3">{{ job.description[:100] }}...</p>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('apply_to_job', job_id=job.id) }}" class="btn btn-sm btn-outline-primary">Apply Now</a>
+                {% else %}
+                    <small class="text-info">Log in to apply</small>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+            <p class="p-4">No jobs found matching your criteria.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

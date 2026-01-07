@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile Management{% endblock %}
+
+{% block content %}
+    <h1>Profile Management</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            Update Information
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('profile') }}">
+                <input type="hidden" name="update_info" value="1">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" class="form-control" value="{{ user.last_name or '' }}">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="contact_phone" class="form-label">Contact Phone</label>
+                        <input type="text" id="contact_phone" name="contact_phone" class="form-control" value="{{ user.contact_phone or '' }}">
+                    </div>
+                </div>
+
+                {% if user.is_employer() %}
+                <div class="mb-3">
+                    <label for="company_info" class="form-label">Company Information/Description</label>
+                    <textarea id="company_info" name="company_info" rows="3" class="form-control">{{ user.company_info or '' }}</textarea>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary">Save Information</button>
+            </form>
+        </div>
+    </div>
+    
+    {% if user.is_job_seeker() %}
+    <div class="card">
+        <div class="card-header">
+            Upload/Update Resume
+        </div>
+        <div class="card-body">
+            {% if user.resume_filename %}
+                <div class="alert alert-info">
+                    Current Resume: <a href="{{ url_for('uploaded_file', filename=user.resume_filename) }}" target="_blank">View Current Resume</a>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    No resume uploaded yet.
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+                <input type="hidden" name="update_resume" value="1">
+                <div class="mb-3">
+                    <label for="resume" class="form-label">Choose Resume File (PDF, DOC, DOCX)</label>
+                    <input type="file" class="form-control" id="resume" name="resume" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Resume</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Seeker Dashboard{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Job Seeker Dashboard</h1>
+    
+    <a href="{{ url_for('profile') }}" class="btn btn-primary mb-4">Manage Profile/Resume</a>
+
+    <div class="card p-4">
+        <h2>Your Applications:</h2>
+        {% if applications %}
+            <div class="list-group mt-3">
+            {% for app in applications %}
+                <!-- Use the dynamic class for edge color -->
+                <div class="list-group-item application-item {{ app.status.lower() }}">
+                    <h5>{{ app.job_applied_for.title }}</h5>
+                    <p class="text-muted">Applied on {{ app.date_applied.strftime('%B %d, %Y') }}</p>
+                    
+                    <!-- Use the dynamic badge class and icon -->
+                    <span class="status-badge {{ app.status.lower() }}">
+                        {% if app.status == 'Approved' %}
+                            <i class="bi bi-check-circle-fill"></i> Approved
+                        {% elif app.status == 'Rejected' %}
+                            <i class="bi bi-x-circle-fill"></i> Rejected
+                        {% else %}
+                            <i class="bi bi-hourglass-split"></i> Pending
+                        {% endif %}
+                    </span>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p class="mt-3">You haven't applied for any jobs yet.</p>
+        {% endif %}
+    </div>
+{% endblock %}
